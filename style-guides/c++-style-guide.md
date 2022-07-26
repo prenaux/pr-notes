@@ -137,44 +137,65 @@ In C++ term an interface is a pure virtual class, it should be declared as a str
 Attributes such as `{Property}` can be specified in C++ comments above its method declaration. For example `{Property}` exposes a method as a native property in languages that support them.
 
 ```
+//! Wraps a number.
 struct iFoo : public ni::iUnknown {
   niDeclareInterfaceUUID(iFoo,0xaaaabbbb,0xaabb,0xaabb,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa);
-  virtual void __stdcall DoSomething() = 0;
+  //! Add a value to the stored number and return its new value.
+  //! \remark Mutates the stored number.
+  virtual ni::tI32 __stdcall AddToNumber(ni::tI32 aValue) = 0;
+  //! Set the stored number.
   //! {Property}
   virtual void SetNumber(ni::tI32 aValue) = 0;
+  //! Get the stored number.
   //! {Property}
   virtual ni::tI32 GetNumber() const = 0;
 };
 ```
 
-### Structs & Classes
+### Structs
 
-#### Struct
-
-Always use uses structs for `POD` types. Prefix with `s` , then `CameCase`.
+Always use uses structs for `POD` types & internal objects. Prefix with `s` , then `CameCase`.
 
 ```
 struct sMyStruct {
 };
 ```
 
-#### Classes
+### Classes
 
-Classes should be used for public
+Classes are used for interface implementations.
 
 ```
-class cMyClass {
+class cMyNumberImpl : public ni::cIUnknownImpl<ni::iFoo> {
+  ni::tI32 _number = 0;
+  
+public:
+  virtual ni::tI32 __stdcall AddToNumber(ni::tI32 aValue) niImpl {
+    _number += aValue;
+    return _number;
+  } 
+  
+  virtual void SetNumber(ni::tI32 aValue) {
+    _number = aValue;
+  }
+  
+  virtual ni::tI32 GetNumber() const {
+    return _number;
+  }
 };
 ```
 
-#### Member functions
+### Member functions
 
-* Use `CamelCase`
-* Function names include a verb: `Set`, `Get`, `Do`,`Render`,`Init`
-* Properties always use `Set` & `Get` prefix.
+* Use `CamelCase`.
+* Function names include a verb: `Set`, `Get`, `Do`,`Render`,`Init`.
+* Properties always use the `Set` (write) & `Get` (read) prefix.
 * Prefix private/internal functions with an underscore: `void _DoSomething()`.
+* Use `niImpl` / `override final` if you provide the final implementation of a virtual function, this is the default. Use `niOverride` / `override` if you override a virtual function but still want to allow it to be overriden - this is used only in very specific cases.
 
-#### Member variables
+### Member variables
+
+Naming:
 
 {% content-ref url="c++-style-guide.md#variables" %}
 [#variables](c++-style-guide.md#variables)
