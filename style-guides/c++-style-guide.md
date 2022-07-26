@@ -6,7 +6,7 @@ We start with Google's C++ style guide at [https://google.github.io/styleguide/c
 
 If you work in a third party's code base follow their style unless it is genuinely unclear what style is being used.
 
-### Indentation&#x20;
+### Indentation
 
 Use the following bash script to clang-format all cpp files in a directory:
 
@@ -21,7 +21,6 @@ LINT_CPP_DIR=src # The directory with the code to lint
              -o -name '*.hh' \
              -o -name '*.hpp' \
              -o -name '*.inl' \) -print0 | xargs -t -0 -n 10 -P ${HAM_NUM_JOBS:-8} run-for-xargs clang-format ${PARAMS[@]})
-
 ```
 
 Use the following .clang-format:
@@ -89,28 +88,29 @@ Interop refers to interoperability with other languages, but also features that 
 
 * `gGlobalVariable`
 * `kGlobalConstant`
-* `aFunctionArgument`&#x20;
+* `aFunctionArgument`
 * `_memberVariable` or legacy `mMemberVariable`
 * `localVariable`
 
 Use only the following Hungarian notation. It is mandatory for global variables, constants, function arguments & member variables. Right now these are allowed and encouraged:
 
-* `n` for integer numbers
-* `f` for floating point numbers - regardless of precision
-* `sz` for zero terminated strings
-* `str` for string objects: `std::string`, `ni::cString`
-* `p` for raw pointers: `Foo*`
-* `ptr` for smart pointers: `std::shared_ptr`, `ni::Ptr`
-* `w` for weak pointers: `std::weak_ptr`, `ni::WeakPtr`
-* `u` for unique pointers, `std::unique_ptr`, `ni::UniquePtr`
-* `map` for sorted map containers & `hmap` for hashed map containers: `std::map`, `astl::hash_map`
-* `set` for sorted set containers & `hset` for hashed set containers: `std::set`, `astl::hash_set`
-* `lst` for list containers: `std::list`
-* `deq` for deque containers: `std::deque`
-* legacy: `v` for vector container, prefer the plural form to denote arrays & vectors: `std::vector`
-* `v` for mathematical vector types: `ni::sVec2f`, `ni::sVec4i`
-* `mtx` for mathematical matrix types: `ni::sMatrixf`
-* `uuid` for 128-bits GUID / UUID types: `ni::tUUID`
+* `_` while not hungarian notation per say, `_` generally indicates private or hidden.
+* `n` for integer numbers.
+* `f` for floating point numbers - regardless of precision.
+* `sz` for zero terminated strings.
+* `str` for string objects: `std::string`, `ni::cString`.
+* `p` for raw pointers: `Foo*`.
+* `ptr` for smart pointers: `std::shared_ptr`, `ni::Ptr`.
+* `w` for weak pointers: `std::weak_ptr`, `ni::WeakPtr`.
+* `u` for unique pointers, `std::unique_ptr`, `ni::UniquePtr`.
+* `map` for sorted map containers & `hmap` for hashed map containers: `std::map`, `astl::hash_map`.
+* `set` for sorted set containers & `hset` for hashed set containers: `std::set`, `astl::hash_set`.
+* `lst` for list containers: `std::list`.
+* `deq` for deque containers: `std::deque`.
+* legacy: `v` for vector container, prefer the plural form to denote arrays & vectors: `std::vector`.
+* `v` for mathematical vector types: `ni::sVec2f`, `ni::sVec4i`.
+* `mtx` for mathematical matrix types: `ni::sMatrixf`.
+* `uuid` for 128-bits GUID / UUID types: `ni::tUUID`.
 
 ### Constants
 
@@ -128,7 +128,26 @@ Prefix with `t`, then `CamelCase`.
 typedef astl::some_container<astl::some_ptr<my::cFoo> > > tFooPtrContainer;
 ```
 
-### Struct & Classes
+### Interfaces
+
+niLang interfaces are used to declare the public interface of C++ modules. A niLang C++ interface has access to reflection, dynamic typing (though `ni::QueryInterface`) & can be used and implemented in other languages (`niScript`, `Java`, `node.js`).
+
+In C++ term an interface is a pure virtual class, it should be declared as a struct without any member variables and only pure virtual functions.
+
+Attributes such as `{Property}` can be specified in C++ comments above its method declaration. For example `{Property}` exposes a method as a native property in languages that support them.
+
+```
+struct iFoo : public ni::iUnknown {
+  niDeclareInterfaceUUID(iFoo,0xaaaabbbb,0xaabb,0xaabb,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa,0xaa);
+  virtual void __stdcall DoSomething() = 0;
+  //! {Property}
+  virtual void SetNumber(ni::tI32 aValue) = 0;
+  //! {Property}
+  virtual ni::tI32 GetNumber() const = 0;
+};
+```
+
+### Structs & Classes
 
 #### Struct
 
@@ -140,6 +159,8 @@ struct sMyStruct {
 ```
 
 #### Classes
+
+Classes should be used for public
 
 ```
 class cMyClass {
@@ -156,7 +177,7 @@ class cMyClass {
 #### Member variables
 
 {% content-ref url="c++-style-guide.md#variables" %}
-See [Variables](c++-style-guide.md#variables)
+[#variables](c++-style-guide.md#variables)
 {% endcontent-ref %}
 
 ### Enums
@@ -214,4 +235,3 @@ For storage (local, member & global variables) your must understand the ownershi
 For the general internal code use `shared_ptr, weak_ptr or unique_ptr` (from the `astl` namespace if using niLang or from `std` otherwise, they have the same APIs).
 
 For public interface which gets exposed through niLang's interop your class should inherit from `ni::iUnknown` (most of the time through `public ni::cIUnknownImpl<ni::iUnknown>`) and then stored with `ni::Ptr<> / ni::WeakPtr<>`.
-
