@@ -154,13 +154,13 @@ struct iFoo : public ni::iUnknown {
 
 ### Structs
 
-Always use uses structs for `POD` types & internal objects. Prefix with `s` , then `CameCase`.
+Struct are used for `POD` types & internal objects. Prefix with `s` , then `CamelCase`.
 
 ```
 struct sMyStruct {
   ni::tI32 _nCounter = 0;
   ni::tF32 _fDegrees = 0;
-  
+
   void AddDegrees(ni::tF32 afDeg) {
     ++_nCounter;
     _fDegrees += afDeg;
@@ -170,22 +170,22 @@ struct sMyStruct {
 
 ### Classes
 
-Classes are used for interface implementations.
+Classes are used for interface implementations. Prefix with `c` , then `CamelCase`.
 
 ```
 class cMyNumberImpl : public ni::cIUnknownImpl<ni::iFoo> {
   ni::tI32 _number = 0;
-  
+
 public:
   virtual ni::tI32 __stdcall AddToNumber(ni::tI32 aValue) niImpl {
     _number += aValue;
     return _number;
-  } 
-  
+  }
+
   virtual void SetNumber(ni::tI32 aValue) {
     _number = aValue;
   }
-  
+
   virtual ni::tI32 GetNumber() const {
     return _number;
   }
