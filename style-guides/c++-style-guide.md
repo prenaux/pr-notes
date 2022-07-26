@@ -238,14 +238,15 @@ enum eFoo : ni::tU32 {
 
 ### Namespaces
 
-Deep namespace hierarchies in C++ leak in a lot of places and make general interop quite difficult (interop is other languages, serialization, RPC, etc...).
+Deep namespace hierarchies in C++ leak in a lot of places and make interop and reflection more difficult.
 
-For example in the Flecs explorer you're going to see `rdd::ecs::component::Position` which is unnecessarily long. This will leak into serialization, and then they often get stripped in debuggers\&logs which makes the actual struct/class concerned hard to identity at a glance ; C++ namespaces are generally not very well handled by various tools. Keeping the nature of the struct/class in its name is a lot simpler to side step those issues.
+The namespace names leak into serialization, get stripped in debuggers\&logs which makes the types concerned hard to identity at a glance and C++ namespaces are generally not very well handled by various tools. Keeping the nature of the types in their name is a lot simpler to side step those issues.
 
-In general use namespaces for these two cases:
+Namespaces are used in these cases:
 
-1. for the root like `std`, `ni`, `astl`. This is meant to avoid symbol conflicts in C++, but not really anything else.
-2. to hide implementation details so something like `boost::detail` (used in boost), `impl`, etc...
+1. At the root of your toolsets/libraries/modules like `std`, `ni` & `astl`. This is meant to avoid symbol conflicts in C++, but not really anything else. Using `using NAMESPACE` at the top of your files and/or in your main precompiled header is generally fine, the namespaces are present to resolve ambiguities if they arise.
+2. To hide implementation details such as `boost::detail` (used in boost) & `impl` in public headers.
+3. Use an anonymous namespace for internal linkage. See [https://google.github.io/styleguide/cppguide.html#Internal\_Linkage](https://google.github.io/styleguide/cppguide.html#Internal\_Linkage).
 
 ### Pointers & references
 
