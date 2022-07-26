@@ -4,7 +4,7 @@
 
 We start with Google's C++ style guide at [https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html), the remainder of this document describe the differences with Google's guidelines.
 
-If you work in a third party's code base follow their style unless it is genuinely unclear what style they use.
+If you work in a third party's code base follow their style unless it is genuinely unclear what style is being used.
 
 ### Indentation&#x20;
 
@@ -120,17 +120,44 @@ Always specify `static const` and its initialization value.
 static const ni::tI32 knValue = 123;
 ```
 
+### Typedef
+
+Prefix with `t`, then `CamelCase`.
+
+```
+typedef astl::some_container<astl::some_ptr<my::cFoo> > > tFooPtrContainer;
+```
+
 ### Struct & Classes
 
-TODO
+#### Struct
+
+Always use uses structs for `POD` types. Prefix with `s` , then `CameCase`.
 
 ```
-struct sMyStructure {
+struct sMyStruct {
 };
-
-class cMyClass {
-}
 ```
+
+#### Classes
+
+```
+class cMyClass {
+};
+```
+
+#### Member functions
+
+* Use `CamelCase`
+* Function names include a verb: `Set`, `Get`, `Do`,`Render`,`Init`
+* Properties always use `Set` & `Get` prefix.
+* Prefix private/internal functions with an underscore: `void _DoSomething()`.
+
+#### Member variables
+
+{% content-ref url="c++-style-guide.md" %}
+[c++-style-guide.md](c++-style-guide.md)
+{% endcontent-ref %}
 
 ### Enums
 
