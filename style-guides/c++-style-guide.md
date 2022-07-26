@@ -155,8 +155,8 @@ class cMyClass {
 
 #### Member variables
 
-{% content-ref url="c++-style-guide.md" %}
-[c++-style-guide.md](c++-style-guide.md)
+{% content-ref url="c++-style-guide.md#variables" %}
+See [Variables](c++-style-guide.md#variables)
 {% endcontent-ref %}
 
 ### Enums
