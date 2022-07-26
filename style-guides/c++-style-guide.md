@@ -6,6 +6,75 @@ We start with Google's C++ style guide at [https://google.github.io/styleguide/c
 
 If you work in a third party's code base follow their style unless it is genuinely unclear what style they use.
 
+### Indentation&#x20;
+
+Use the following bash script to clang-format all cpp files in a directory:
+
+```
+# Assumes ham is around
+LINT_CPP_DIR=src # The directory with the code to lint
+(set -e ; find "$LINT_CPP_DIR" \
+             \( -name '*.c' \
+             -o -name '*.cc' \
+             -o -name '*.cpp' \
+             -o -name '*.h' \
+             -o -name '*.hh' \
+             -o -name '*.hpp' \
+             -o -name '*.inl' \) -print0 | xargs -t -0 -n 10 -P ${HAM_NUM_JOBS:-8} run-for-xargs clang-format ${PARAMS[@]})
+
+```
+
+Use the following .clang-format:
+
+```
+#
+# Documentation at https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#
+Language: Cpp
+BasedOnStyle: Google
+SortIncludes: false
+IndentWidth: 2
+ContinuationIndentWidth: 2
+PPIndentWidth: 2
+ColumnLimit: 88
+MaxEmptyLinesToKeep: 1
+IndentGotoLabels: false
+IndentWrappedFunctionNames: false
+ReflowComments: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AllowAllConstructorInitializersOnNextLine: true
+UseTab: false
+UseCRLF: false
+DeriveLineEnding: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: false
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeElse: true
+  AfterFunction: false
+BreakStringLiterals: false
+BreakConstructorInitializers: BeforeComma
+PackConstructorInitializers: Never
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AlignConsecutiveBitFields: true
+BreakBeforeTernaryOperators: true
+AlignAfterOpenBracket: AlwaysBreak
+AlignOperands: Align
+BreakBeforeBinaryOperators: None
+ForEachMacros: ["niLoop","niLoopr","niLoopit","niLooprit","niExec","niExec_","niSubmit","niSubmit_"]
+SpaceBeforeParens: ControlStatementsExceptControlMacros
+AlignEscapedNewlines: Left
+AlignTrailingComments: true
+```
+
 ### Usage of std
 
 We use the `std` namespace in this style guide, however if you use niLang use the `astl` namespace when available.
