@@ -51,6 +51,18 @@ Always specify `static const` and its initialization value.
 static const ni::tI32 knValue = 123;
 ```
 
+### Struct & Classes
+
+TODO
+
+```
+struct sMyStructure {
+};
+
+class cMyClass {
+}
+```
+
 ### Enums
 
 By default prefer interoperable enums.
