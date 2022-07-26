@@ -158,6 +158,13 @@ Always use uses structs for `POD` types & internal objects. Prefix with `s` , th
 
 ```
 struct sMyStruct {
+  ni::tI32 _nCounter = 0;
+  ni::tF32 _fDegrees = 0;
+  
+  void AddDegrees(ni::tF32 afDeg) {
+    ++_nCounter;
+    _fDegrees += afDeg;
+  }
 };
 ```
 
